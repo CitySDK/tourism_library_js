@@ -219,7 +219,7 @@ UriTemplate.build = function(values) {
 	}
 	
 	function expandArray(value, op, array) {
-		var parameters = "",
+		var parameters = "", ob,
 			separator = ",";
 		if(op.named)
 			parameters += value + "=";
