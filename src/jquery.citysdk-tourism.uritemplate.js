@@ -103,7 +103,7 @@ UriTemplate.fromTemplate = function(template) {
 /**
  * Checks whether a template has a given parameter
  * @memberOf UriTemplate
- * @values parameter check if a given template has a parameter
+ * @param parameter check if a given template has a parameter
  * @return {boolean} true if it is present, false otherwise
  */
 UriTemplate.hasParameter = function(parameter) {
@@ -124,7 +124,7 @@ UriTemplate.hasParameter = function(parameter) {
 /**
  * Converts a given loaded template into a URI containg the given values
  * @memberOf UriTemplate
- * @values values of each parameter
+ * @param values values of each parameter
  * @return {String} the converted URI
  */
 UriTemplate.build = function(values) {
