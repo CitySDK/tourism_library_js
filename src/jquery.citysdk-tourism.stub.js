@@ -468,6 +468,9 @@ TourismClient = function(data) {
 		}	
 	};
 	
+	/**
+	 * @private
+	 */
 	validateRelationTerm = function(term) {
 		if(term == undefined) {
 			throw {

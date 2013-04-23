@@ -76,7 +76,7 @@ var operator = {
 
 /**
  * @name UriTemplate
- * @class Implementation of the URI Template RFC6570 (http://tools.ietf.org/html/rfc6570)
+ * @class Implementation of the URI Template RFC6570 (<a target="_blank" href="http://tools.ietf.org/html/rfc6570">http://tools.ietf.org/html/rfc6570</a>)
  */
 UriTemplate = function() {
 	var template, operators;
@@ -135,7 +135,7 @@ UriTemplate.build = function(values) {
 		parameters = "",
 		modifier,
 		template,
-		size;
+		size, op;
 	
 	while (match = templateRegex.exec(this.template)) {
 		template = match[0];
@@ -219,8 +219,8 @@ UriTemplate.build = function(values) {
 	}
 	
 	function expandArray(value, op, array) {
-		var parameters = "", ob,
-			separator = ",";
+		var parameters = "",
+			separator = ",", ob;
 		if(op.named)
 			parameters += value + "=";
 			

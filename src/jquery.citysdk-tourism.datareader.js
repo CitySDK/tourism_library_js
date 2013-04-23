@@ -623,13 +623,14 @@ DataReader.getLocationPoint = function(poi, term) {
 	var list = [], 
 		location, 
 		point, 
-		data;
+		data, 
+		points;
 	if(poi == null)
 		return list;
 		
 	location = poi.location;
 	if(location.point != undefined) {
-		var points = location.point;
+		points = location.point;
 		for(key in points) {
 			if(points[key].term == term) {
 				data = []; 
@@ -656,13 +657,14 @@ DataReader.getLocationLine = function(poi, term) {
 		line,
 		data, 
 		point1,
-		point2;
+		point2, 
+		lines;
 	if(poi == null)
 		return list;
 		
 	location = poi.location;
 	if(location.line != undefined) {
-		var lines = location.line;
+		lines = location.line;
 		for(key in lines) {
 			if(lines[key].term == term) {
 				data = [];
@@ -694,7 +696,7 @@ DataReader.getLocationPolygon = function(poi, term) {
 		polygon,
 		polygons,
 		data,
-		postList,
+		posList,
 		i;
 	if(poi == null)
 		return list;
