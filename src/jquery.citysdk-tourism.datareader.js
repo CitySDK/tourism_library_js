@@ -414,14 +414,19 @@ PolygonContent.prototype = new GeometryContent;
  * Gets the available languages for the POI object.
  * @static
  * @param poi a single POI object (such as a Point Of Interest, Route or Event).
- * @returns {String[]} an array containing the available languages.
+ * @param field specifies the field to be checked (either label or description).
+ * @returns {String[]} an array containing the available languages of a given field.
  */
-DataReader.getAvailableLanguages = function(poi) {
-	var labels = poi.label, 
+DataReader.getAvailableLanguages = function(poi, field) {
+	var values, 
 		languages = [],
 		lang;
-	for(key in labels) {
-		lang = labels[key].lang.replace("-", "_");
+	if(field != 'label' && field != 'description')
+		return languages;
+		
+	values = poi[field];
+	for(key in values) {
+		lang = values[key].lang.replace("-", "_");
 		languages[lang.split("_")[0]] = lang;
 	}
 	
