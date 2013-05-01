@@ -230,14 +230,15 @@ TourismClient = function(data) {
 	/**
      * Perform a request to get a list of Categories of either POIs, Events or Routes.
      * @memberOf TourismClient
-     * @param term which list to request. It should be either pois, events or routes
+     * @param parameters the request parameters. The list value should be either pois, events or routes
 	 * @param handleData the callback to handle the returned data. Its parameters should be the data (a list of Categories) and a jQuery XMLHttpRequest (jqXHR) object.
      * @param handleError the callback to handle network errors. Its parameters should be a jQuery XMLHttpRequest (jqXHR) object, textStatus and errorThrown.
      * @throws {InvalidTermException} thrown if the term is an invalid term.
+     * @throws {InvalidParameterException} thrown if at least one parameter is not valid for the Categories listing search. 
      * @throws {ResourceNotAvailable} thrown if getting a category listing is unavailable for the server. 
      * @throws {VersionNotAvailableException} thrown if the version was not set or is not available.
      */
-	this.getCategories = function(term, handleData, handleError) {
+	this.getCategories = function(parameters, handleData, handleError) {
 		getCategorization(term, handleData, handleError, resourceTerms.FIND_CATEGORIES);
 	};
 	
@@ -248,6 +249,7 @@ TourismClient = function(data) {
 	 * @param handleData the callback to handle the returned data. Its parameters should be the data (a list of Tags) and a jQuery XMLHttpRequest (jqXHR) object.
      * @param handleError the callback to handle network errors. Its parameters should be a jQuery XMLHttpRequest (jqXHR) object, textStatus and errorThrown.
      * @throws {InvalidTermException} thrown if the term is an invalid term.
+     * @throws {InvalidParameterException} thrown if at least one parameter is not valid for the Tags listing search. 
      * @throws {ResourceNotAvailable} thrown if getting a tags listing is unavailable for the server. 
      * @throws {VersionNotAvailableException} thrown if the version was not set or is not available.
      */
@@ -338,13 +340,11 @@ TourismClient = function(data) {
 	/**
 	 * @private
 	 */
-	getCategorization = function(term, handleData, handleError, resource) {
+	getCategorization = function(parameters, handleData, handleError, resource) {
 		verifyVersion();
 		validateResource(resource);
-		validateListTerm(term);		
-		var parameters = {
-			"list": term,
-		};
+		validateParameters(resource, parameters);
+		validateListTerm(parameters);
 		makeQueryCall(mapping[version][resource].href, parameters, handleData, handleError);
 	};
 	
@@ -457,13 +457,14 @@ TourismClient = function(data) {
 	 */
 	validateListTerm = function(term) {
 		if(term == undefined 
-			|| (term != parameterTerms.POIS
-				&& term != parameterTerms.EVENTS
-				&& term != parameterTerms.ROUTES)) {
+			|| term.list == undefined
+			|| (term.list != parameterTerms.POIS
+				&& term.list != parameterTerms.EVENTS
+				&& term.list != parameterTerms.ROUTES)) {
 			throw {
 		    	name: "InvalidTermException",
 		   		level: "Show Stopper",
-		    	message: term + " is invalid. It should be either poi, event or route"
+		    	message: "List is non-existence or its term is invalid. The list parameter should be either poi, event or route"
 		   	};
 		}	
 	};
@@ -472,14 +473,6 @@ TourismClient = function(data) {
 	 * @private
 	 */
 	validateRelationTerm = function(term) {
-		if(term == undefined) {
-			throw {
-		    	name: "InvalidTermException",
-		   		level: "Show Stopper",
-		    	message: term + " is invalid. It should be either child or parent."
-		   	};
-		}
-		
 		if(term == undefined 
 			|| (term != "child"
 				&& term != "parent")) {
