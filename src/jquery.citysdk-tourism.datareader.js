@@ -254,7 +254,7 @@ function ImageContent(content) {
 	
 	/**
      * Getter
-     * @memberOf DataContent
+     * @memberOf ImageContent
      * @returns {String} the content
      */
 	this.getContent = function() {
@@ -275,7 +275,7 @@ function LocationContent(latitude, longitude) {
 	/**
      * Gets the latitude
      * @memberOf LocationContent
-     * @returns {DataContent} the latitude
+     * @returns {String} the latitude
      */
 	this.getLatitude = function() {
 		return this.latitude;
@@ -284,7 +284,7 @@ function LocationContent(latitude, longitude) {
 	/**
      * Gets the longitude
      * @memberOf LocationContent
-     * @returns {DataContent} the longitude
+     * @returns {String} the longitude
      */
 	this.getLongitude = function() {
 		return this.longitude;
@@ -415,10 +415,14 @@ DataReader.getAvailableLanguages = function(poi, field) {
 		
 	if(field != 'label' && field != 'description')
 		return languages;
-		
+	
 	values = poi[field];
 	for(key in values) {
-		lang = values[key].lang.replace("-", "_");
+		lang = values[key].lang;
+		if(lang == undefined)
+			lang = poi.lang;
+			
+		lang = lang.replace("-", "_");
 		languages[lang.split("_")[0]] = lang;
 	}
 	
@@ -481,7 +485,7 @@ DataReader.getLabel = function(poi, term, lang) {
  * @memberOf DataReader
  * @param poi a single POI object (such as a Point Of Interest, Route or Event).
  * @param lang the wanted language.
- * @returns {DataContent} a description in a given language, or in en_GB if
+ * @returns {String} a description in a given language, or in en_GB if
  * the wanted language does not exist or false if both do not exist.
  */
 DataReader.getDescription = function(poi, lang) {
@@ -632,7 +636,7 @@ DataReader.getLocationPoint = function(poi, term) {
 			if(points[key].term == term) {
 				data = []; 
 				data = points[key].Point.posList.split(" ");
-				point = new PointContent(new DataContent(data[0]), new DataContent(data[1]));
+				point = new PointContent(data[0], data[1]);
 				list.push(point);
 			}
 		}
@@ -670,8 +674,8 @@ DataReader.getLocationLine = function(poi, term) {
 				data = lines[key].LineString.posList.split(",");
 				point1 = data[0].split(" ");
 				point2 = data[1].split(" ");
-				line = new LineContent(new LocationContent(new DataContent(point1[0]), new DataContent(point1[1])), 
-									   new LocationContent(new DataContent(point2[2]), new DataContent(point2[3])));
+				line = new LineContent(new LocationContent(point1[0], point1[1]), 
+									   new LocationContent(point2[2], point2[3]));
 				list.push(line);
 			}
 		}
@@ -708,7 +712,7 @@ DataReader.getLocationPolygon = function(poi, term) {
 				data = polygons[key].SimplePolygon.posList.split(",");
 				for(i = 0; i < data.length; i++) {
 					posList = data[i].split(" ");
-					polygon.addLocation(new LocationContent(new DataContent(posList[0]), new DataContent(posList[1])));
+					polygon.addLocation(new LocationContent(posList[0], posList[1]));
 				}
 				list.push(polygon);
 			}
