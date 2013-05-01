@@ -198,39 +198,12 @@ DataReader.getLocalLanguage = function() {
 };
 
 /**
- * @name DataContent
- * @class Container of data in a user-defined language or in the default language.
- * @param content content
- */
-function DataContent(content) {
-	this.content = content;
-	
-	/**
-     * Setter
-     * @memberOf DataContent
-     * @param the new content
-     */
-	this.setContent = function(content) {
-		this.content = content;
-	};
-	
-	/**
-     * Getter
-     * @memberOf DataContent
-     * @returns {String} the content
-     */
-	this.getContent = function() {
-		return this.content;
-	};
-};
-
-/**
  * @name ImageContent
  * @class Container of an image. It can be either the byte-code (base64) of the image or a URI of the image.
  * @param content either an image URI or byte code
  */
 function ImageContent(content) {
-	this.setContent(content);
+	this.content = content;
 	this.imgByteCode = false;
 	this.imgUri = false;
 	
@@ -269,9 +242,25 @@ function ImageContent(content) {
 	this.isImgUri = function(imgUri) {
 		this.imgUri = imgUri;
 	};
+	
+	/**
+     * Setter
+     * @memberOf ImageContent
+     * @param the new content
+     */
+	this.setContent = function(content) {
+		this.content = content;
+	};
+	
+	/**
+     * Getter
+     * @memberOf DataContent
+     * @returns {String} the content
+     */
+	this.getContent = function() {
+		return this.content;
+	};
 };
-
-ImageContent.prototype =  new DataContent;
 
 /**
  * @name LocationContent
@@ -421,6 +410,9 @@ DataReader.getAvailableLanguages = function(poi, field) {
 	var values, 
 		languages = [],
 		lang;
+	if(poi == null || poi == undefined)
+		return languages;
+		
 	if(field != 'label' && field != 'description')
 		return languages;
 		
@@ -451,12 +443,12 @@ DataReader.setDefaultLanguage = function(lang) {
  * @param poi a single POI object (such as a Point of Interest, Route or Event).
  * @param term the wanted term (see {@link term}).
  * @param lang the wanted language.
- * @returns {DataContent} a label description corresponding to the term in a given language, or en_GB if
- * the wanted language does not exist or null if both do not exist. 
+ * @returns {String} a label description corresponding to the term in a given language, or en_GB if
+ * the wanted language does not exist or false if both do not exist. 
  */
 DataReader.getLabel = function(poi, term, lang) {
-	if(poi == null)
-		return new DataContent(null);
+	if(poi == null || poi == undefined)
+		return false;
 	
 	if(this.defaultLanguage == undefined)
 		this.setDefaultLanguage("en_GB");
@@ -477,11 +469,11 @@ DataReader.getLabel = function(poi, term, lang) {
 			defaultValue = labels[key].value;
 		} else if(labels[key].term == term
 					&& this.langsAreEqual(labelLang, lang)) {
-			return new DataContent(labels[key].value);
+			return labels[key].value;
 		}
 	}
 	
-	return new DataContent(defaultValue);
+	return defaultValue;
 };
 
 /**
@@ -490,11 +482,11 @@ DataReader.getLabel = function(poi, term, lang) {
  * @param poi a single POI object (such as a Point Of Interest, Route or Event).
  * @param lang the wanted language.
  * @returns {DataContent} a description in a given language, or in en_GB if
- * the wanted language does not exist or null if both do not exist.
+ * the wanted language does not exist or false if both do not exist.
  */
 DataReader.getDescription = function(poi, lang) {
-	if(poi == null)
-		return new DataContent(null);
+	if(poi == null || poi == undefined)
+		return false;
 
 	if(this.defaultLanguage == undefined)
 		this.setDefaultLanguage("en_GB");
@@ -513,11 +505,11 @@ DataReader.getDescription = function(poi, lang) {
 			defaultValue = descriptions[key].value;
 		} else if((descriptions[key].type == undefined || descriptions[key].type == null) 
 					&& this.langsAreEqual(descriptionLang, lang)) {
-			return new DataContent(descriptions[key].value);
+			return descriptions[key].value;
 		}
 	}
 	
-	return new DataContent(defaultValue);
+	return defaultValue;
 };
 
 /**
@@ -525,39 +517,39 @@ DataReader.getDescription = function(poi, lang) {
  * @memberOf DataReader
  * @param poi a single POI object (such as a Point Of Interest, Route or Event).
  * @param lang the wanted language.
- * @returns {DataContent} a price description in the given language, or in en_GB if
- * the wanted language does not exist or null if both do not exist.
+ * @returns {String} a price description in the given language, or in en_GB if
+ * the wanted language does not exist or false if both do not exist.
  */
 DataReader.getPrice = function(poi, lang) {
-	return this.getValueWithTag(poi, lang, "X-citysdk/price");
+	return this.getValueWithTerm(poi, lang, "X-citysdk/price");
 };
 
 /**
  * Gets the waiting time description from the POI object with a given language.
  * @memberOf DataReader
  * @param poi a single POI object (such as a Point Of Interest, Route or Event).
- * @returns {DataContent} the waiting time description (in seconds) or null.
+ * @returns {String} the waiting time description (in seconds) or false.
  */
 DataReader.getWaitingTime = function(poi) {
-	return this.getValueWithTag(poi, null, "X-citysdk/waiting-time");
+	return this.getValueWithTerm(poi, null, "X-citysdk/waiting-time");
 };
 
 /**
  * Gets the occupation description from the POI object with a given language.
  * @memberOf DataReader
  * @param poi a single POI object (such as a Point Of Interest, Route or Event).
- * @returns {DataContent} the occupation description (0 to 100) or null.
+ * @returns {String} the occupation description (0 to 100) or false.
  */
 DataReader.getOccupation = function(poi, lang) {
-	return this.getValueWithTag(poi, null, "X-citysdk/occupation");
+	return this.getValueWithTerm(poi, null, "X-citysdk/occupation");
 };
 
 /**
  * @private
  */
 DataReader.getValueWithTag = function(poi, lang, tag) {
-	if(poi == null)
-		return new DataContent(null);
+	if(poi == null || poi == undefined)
+		return false;
 		
 	if(this.defaultLanguage == undefined)
 		this.setDefaultLanguage("en_GB");
@@ -579,11 +571,11 @@ DataReader.getValueWithTag = function(poi, lang, tag) {
 		} else if(descriptions[key].type != undefined
 					&& descriptions[key].type == tag) {
 			if(lang == null || this.langsAreEqual(descriptionLang, this.defaultLanguage))
-				return new DataContent(descriptions[key].value);
+				return descriptions[key].value;
 		}
 	}
 	
-	return new DataContent(defaultValue);
+	return defaultValue;
 };
 
 /**
@@ -596,7 +588,7 @@ DataReader.getThumbnails = function(poi) {
 	var thumbnails = [],
 		links,
 		content;
-	if(poi == null)
+	if(poi == null || poi == undefined)
 		return thumbnails;
 	
 	links = poi.link;
@@ -630,7 +622,7 @@ DataReader.getLocationPoint = function(poi, term) {
 		point, 
 		data, 
 		points;
-	if(poi == null)
+	if(poi == null || poi == undefined)
 		return list;
 		
 	location = poi.location;
@@ -664,7 +656,7 @@ DataReader.getLocationLine = function(poi, term) {
 		point1,
 		point2, 
 		lines;
-	if(poi == null)
+	if(poi == null || poi == undefined)
 		return list;
 		
 	location = poi.location;
@@ -703,7 +695,7 @@ DataReader.getLocationPolygon = function(poi, term) {
 		data,
 		posList,
 		i;
-	if(poi == null)
+	if(poi == null || poi == undefined)
 		return list;
 		
 	location = poi.location;
@@ -738,7 +730,7 @@ DataReader.getLocationGeometry = function(poi, term) {
 		pointList,
 		lineList,
 		polygonList;
-	if(poi == null)
+	if(poi == null || poi == undefined)
 		return list;
 		
 	pointList = DataReader.getLocationPoint(poi, term);
@@ -753,17 +745,17 @@ DataReader.getLocationGeometry = function(poi, term) {
  * Gets the contacts from the POI object.
  * @memberOf DataReader
  * @param poi a single POI object (such as a Point Of Interest, Route or Event).
- * @returns {DataContent} the contacts in vCard format or null.
+ * @returns {String} the contacts in vCard format or false.
  */
 DataReader.getContacts = function(poi) {
-	if(poi == null)
-		return new DataContent(null);
+	if(poi == null || poi == undefined)
+		return false;
 		
 	var location = poi.location;
 	if(location == undefined || (location != undefined && location.address == undefined))
-		return new DataContent(null);
+		return false;
 	else
-		return new DataContent(location.address.value);
+		return location.address.value;
 };
 
 /**
@@ -771,20 +763,20 @@ DataReader.getContacts = function(poi) {
  * @memberOf DataReader
  * @param poi a single POI object (such as a Point Of Interest, Route or Event).
  * @param term the wanted term (see {@link term})
- * @returns {DataContent} the calendar in iCalendar format with the given term or null.
+ * @returns {String} the calendar in iCalendar format with the given term or false.
  */
 DataReader.getCalendar = function(poi, term) {
-	if(poi == null)
-		return new DataContent(null);
+	if(poi == null || poi == undefined)
+		return false;
 		
 	var time = poi.time;
 	for(key in time) {
 		if(time[key].type == "text/icalendar"
 			&& time[key].term == term)
-			return new DataContent(time[key].value);
+			return time[key].value;
 	}
 	
-	return new DataContent(null);
+	return false;
 };
 
 /**
@@ -797,7 +789,7 @@ DataReader.getImagesUri = function(poi) {
 	var list = [],
 		links,
 		content;
-	if(poi == null)
+	if(poi == null || poi == undefined)
 		return list;
 	
 	this.loadMimeTypes();
@@ -819,11 +811,11 @@ DataReader.getImagesUri = function(poi) {
  * @memberOf DataReader
  * @param poi the object to get the data.
  * @param term the term used (see {@link term}).
- * @returns {DataContent} the relationship base with the given term or null if none was found.
+ * @returns {String} the relationship base with the given term or false if none was found.
  */
 DataReader.getRelationshipBase = function(poi, term) {
-	if(poi == null)
-		return new DataContent(null);
+	if(poi == null || poi == undefined)
+		return false;
 		
 	var location = poi.location,
 		relationship;
@@ -831,11 +823,11 @@ DataReader.getRelationshipBase = function(poi, term) {
 		relationship = location.relationship;
 		for(key in relationship) {
 			if(relationship[key].term == term)
-				return new DataContent(relationship[key].base);
+				return relationship[key].base;
 		}
 	}
 	
-	return new DataContent(null);
+	return false;
 };
 
 /**
@@ -843,11 +835,11 @@ DataReader.getRelationshipBase = function(poi, term) {
  * @memberOf DataReader
  * @param poi the object to get the data.
  * @param term the term used (see {@link term}).
- * @returns {DataContent} the relationship id with the given term or null if none was found.
+ * @returns {String} the relationship id with the given term or false if none was found.
  */
 DataReader.getRelationshipId = function(poi, term) {
-	if(poi == null)
-		return new DataContent(null);
+	if(poi == null || poi == undefined)
+		return false;
 		
 	var location = poi.location,
 		relationship;
@@ -856,14 +848,14 @@ DataReader.getRelationshipId = function(poi, term) {
 		for(key in relationship) {
 			if(relationship[key].term == term) {
 				if(relationship[key].targetPOI != undefined)
-					return new DataContent(relationship[key].targetPOI);
+					return relationship[key].targetPOI;
 				else
-					return new DataContent(relationship[key].targetEvent);
+					return relationship[key].targetEvent;
 			}
 		}
 	}
 	
-	return new DataContent(null);
+	return false;
 };
 
 /**
@@ -871,18 +863,18 @@ DataReader.getRelationshipId = function(poi, term) {
  * @memberOf DataReader
  * @param poi the object to get the data.
  * @param term the term used - see {@link term}
- * @returns {DataContent} the link with the given term or null if none was found.
+ * @returns {String} the link with the given term or null if none was found.
  */
 DataReader.getLink = function(poi, term) {
-	if(poi == null)
-		return new DataContent(null);
+	if(poi == null || poi == undefined)
+		return false;
 		
 	var links = poi.link;
 	for(key in links) {
 		if(links[key].term == term) {
-			return new DataContent(links[key].href);
+			return links[key].href;
 		}
 	}
 	
-	return new DataContent(null);
+	return false;
 };
