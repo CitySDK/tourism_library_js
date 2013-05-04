@@ -160,7 +160,7 @@ UriTemplate.build = function(values) {
 		uri = uri.replace(template, parameters);
 	}
 	
-	return uri.replace(/\ /g, "%20");
+	return uri;
 	
 	function endsWith(str, suffix) {
 	    return str.indexOf(suffix, str.length - suffix.length) !== -1;
