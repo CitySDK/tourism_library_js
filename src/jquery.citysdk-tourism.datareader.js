@@ -409,7 +409,7 @@ PolygonContent.prototype = new GeometryContent;
 DataReader.getAvailableLanguages = function(poi, field) {
 	var values, 
 		languages = [],
-		lang;
+		lang, primary;
 	if(poi == null || poi == undefined)
 		return languages;
 		
@@ -422,8 +422,9 @@ DataReader.getAvailableLanguages = function(poi, field) {
 		if(lang == undefined)
 			lang = poi.lang;
 			
-		lang = lang.replace("-", "_");
-		languages[lang.split("_")[0]] = lang;
+		primary = lang.replace("-", "_").split("_")[0];
+		if(!(primary in languages))
+			languages[primary] = lang;
 	}
 	
 	return languages;
