@@ -85,7 +85,8 @@ var resourceTerms = {
  * <li>MINIMAL: minimal;</li>
  * <li>COORDS: coords;</li>
  * <li>CODE: code;</li>
- * <li>SHOW: show;</li>
+ * <li>OFFSET: offset;</li>
+ * <li>LIMIT: limit;</li>
  * <li>EVENT: event;</li>
  * <li>TIME: time;</li>
  * <li>ROUTE: route;</li>
@@ -94,7 +95,7 @@ var resourceTerms = {
  * </ul>
  * </ul>
  *
- * An example of its usage: parameterTerms.SEARCH_PARAMETERS.SHOW
+ * An example of its usage: parameterTerms.SEARCH_PARAMETERS.TAG
  *
  */
 parameterTerms = {
@@ -110,7 +111,8 @@ parameterTerms = {
 		"MINIMAL": "minimal",
 		"COORDS": "coords",
 		"CODE": "code",
-		"SHOW": "show",
+		"OFFSET": "offset",
+		"LIMIT": "limit",
 		"EVENT": "event",
 		"TIME": "time",
 		"ROUTE": "route",
