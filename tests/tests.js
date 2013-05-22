@@ -122,11 +122,13 @@
  asyncTest("test poi with id", function() {
  	expect(6);
 
- 	var show = [0, 19],
+ 	var limit = 20,
+ 	offset = 0,
  	category = ['Museum', 'Garden'],
  	tag = 'culture'
  	params = {
- 		'show': show,
+ 		'limit': limit,
+ 		'offset': offset,
  		'category': category,
  		'tag': tag
  	};
@@ -155,11 +157,13 @@
  asyncTest("test available languages", function() {
  	expect(12);
 
- 	var show = [0, 19],
+ 	var limit = 20,
+ 	offset = 0,
  	category = ['Music', 'Notícias', 'Stuff from Stuff'],
  	tag = 'rock'
  	params = {
- 		'show': show,
+ 		'limit': limit,
+ 		'offset': offset,
  		'category': category,
  		'tag': tag
  	};
@@ -198,11 +202,14 @@
 
  asyncTest("test data reader", function() {
  	expect(15);
- 	var show = [0, 19],
+ 	
+ 	var limit = 20,
+ 	offset = 0,
  	category = ['Music', 'Live'],
  	tag = ['rock', 'indie']
  	params = {
- 		'show': show,
+ 		'limit': limit,
+ 		'offset': offset,
  		'category': category,
  		'tag': tag
  	};
