@@ -45,7 +45,8 @@
  * <li>FIND_ROUTE_RELATION: find-route-relation.</li>
  * </ul>
  * <li>FIND_CATEGORIES: find-categories;</li>
- * <li>TAGS: find-tags.
+ * <li>FIND_TAGS: find-tags;</li>
+ * <li>FIND_CODE: find-code.</li>
  * </ul>
  *
  * An example of its usage: parameterTerms.RESOURCE_POIS.FIND_POI
@@ -65,7 +66,8 @@ var resourceTerms = {
 	},
 	
 	"FIND_CATEGORIES": "find-categories",
-	"FIND_TAGS": "find-tags"
+	"FIND_TAGS": "find-tags",
+	"FIND_CODE": "find-code"
 },
 
 /**
@@ -87,9 +89,8 @@ var resourceTerms = {
  * <li>CODE: code;</li>
  * <li>OFFSET: offset;</li>
  * <li>LIMIT: limit;</li>
- * <li>EVENT: event;</li>
  * <li>TIME: time;</li>
- * <li>ROUTE: route;</li>
+ * <li>NAME: name;</li>
  * <li>RELATION: relation;</li>
  * <li>LIST: list.</li>
  * </ul>
@@ -113,9 +114,8 @@ parameterTerms = {
 		"CODE": "code",
 		"OFFSET": "offset",
 		"LIMIT": "limit",
-		"EVENT": "event",
+		"NAME": "name",
 		"TIME": "time",
-		"ROUTE": "route",
 		"RELATION": "relation",
 		"LIST": "list"
 	}
