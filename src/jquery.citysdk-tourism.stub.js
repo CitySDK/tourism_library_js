@@ -294,6 +294,18 @@ TourismClient = function(data) {
 	this.getRoute = function(base, id, handleData, handleError) {
 		makeSingleCall(base + id, handleData, handleError);
 	};
+
+	/**
+     * Request for a generic POI-based object.
+     * @memberOf TourismClient
+     * @param base the base URI of the object.
+     * @param id the id of the object.
+	 * @param handleData the callback to handle the returned data. Its parameters should be the data (a object), a textStatus and a jQuery XMLHttpRequest (jqXHR) object.
+     * @param handleError the callback to handle network errors. Its parameters should be a jQuery XMLHttpRequest (jqXHR) object, textStatus and errorThrown.
+     */
+	this.getGeneric = function(base, id, handleData, handleError) {
+		makeSingleCall(base + id, handleData, handleError);
+	};
 	
 	/**
      * Returns a list of Points of Interest with the given relation with the POI
@@ -328,6 +340,19 @@ TourismClient = function(data) {
 	this.getEventRelation = function(base, id, relation, handleData, handleError) {
 		getRelation(base, id, relation, handleData, handleError, resourceTerms.RESOURCE_EVENTS.FIND_EVENT_RELATION);
 	};
+
+	/**
+     * Returns a list of POI-based objects containing the given code
+     * @memberOf TourismClient
+     * @param code a link to search for POI-based objects
+	 * @param handleData the callback to handle the returned data. Its parameters should be the data (a list of POI-based objects), a textStatus and a jQuery XMLHttpRequest (jqXHR) object.
+	 * @param handleError the callback to handle network errors. Its parameters should be a jQuery XMLHttpRequest (jqXHR) object, textStatus and errorThrown.
+	 * @throws {ResourceNotAvailable} thrown if getting a Event relations is unavailable for the server. 
+     * @throws {VersionNotAvailableException} thrown if the version was not set or is not available.
+     */
+	this.getByCode = function(code, handleData, handleError) {
+		getCode(code, handleData, handleError, resourceTerms.FIND_CODE);
+	};
 	
 	/**
 	 * @private
@@ -361,6 +386,18 @@ TourismClient = function(data) {
 			"base": base,
 			"id": id,
 			"relation": term
+		};
+		makeQueryCall(mapping[version][resource].href, parameters, handleData, handleError);
+	};
+
+	/**
+	 * @private
+	 */
+	getCode = function(code, handleData, handleError, resource) {
+		verifyVersion();
+		validateResource(resource);
+		var parameters = {
+			"code": code
 		};
 		makeQueryCall(mapping[version][resource].href, parameters, handleData, handleError);
 	};

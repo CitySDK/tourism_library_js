@@ -785,6 +785,37 @@ DataReader.getCalendar = function(poi, term) {
 };
 
 /**
+ * Gets the categories in a given language.
+ * @memberOf DataReader
+ * @param poi the object to get the data.
+ * @param lang the wanted language.
+ * @returns {String} a list containing the following: the categories in the desired language if none found or empty.
+ */
+DataReader.getCategories = function(poi, lang) {
+	if(poi == null || poi == undefined)
+		return false;
+
+	if(this.defaultLanguage == undefined)
+		this.setDefaultLanguage("en_GB");
+	
+	var categoriesLang, poiLang = poi.lang,
+		categories = poi.category,
+		list = [];
+	for(key in categories) {
+		if(categories[key].lang == undefined) 
+			categoriesLang = poiLang;
+		else
+			categoriesLang = categories[key].lang;
+			
+		if(this.langsAreEqual(categoriesLang, this.defaultLanguage)) {
+			list.push(categories[key].value);
+		}
+	}
+	
+	return list;
+};
+
+/**
  * Gets all image URI from the link section of the POI object.
  * @memberOf DataReader
  * @param poi a single POI object (such as a Point Of Interest, Route or Event).
