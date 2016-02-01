@@ -4,15 +4,18 @@ citysdk-wp5-js
 This library provides the general methods written in JavaScript to use the CitySDK Tourism API. 
 You can check the test-case.html (unit tests using QUnit) for a few usage examples.
 
-**See http://citysdk.ist.utl.pt/ for more information**
+**See http://tourism.citysdk.eu/ for more information**
+
+**There is a paper describing this effort http://link.springer.com/article/10.1186/s13174-015-0039-z**
 
 Documentation
 =================
-Documentation is available here: http://citysdk.ist.utl.pt/jsdoc/index.html
+Documentation is available here: http://tourism.citysdk.eu/jsdoc/index.html
 
 Developed By
 =================
 * Pedro Cruz - <pedro.cruz.sousa@gmail.com>
+* Copyright IST
 
 
 License
