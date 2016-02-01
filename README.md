@@ -15,7 +15,7 @@ Documentation is available here: http://tourism.citysdk.eu/jsdoc/index.html
 Developed By
 =================
 * Pedro Cruz - <pedro.cruz.sousa@gmail.com>
-* Copyright IST
+* Copyright IST 2013
 
 
 License
